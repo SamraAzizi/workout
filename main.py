@@ -1,6 +1,7 @@
 import streamlit as st
 from profiles import create_profile, get_profile, get_notes, get_profile
 from form_submit import update_personal_info, delete_note, add_note
+from ai import ask_ai, get_macro
 
 st.title("Personal Fitness Tool")
 
@@ -59,25 +60,90 @@ def goals_form():
             else:
                 st.warning("Please Select At least One Goal.")
 @st.fragment
-def macros():
+def macro():
     profile = st.session_state.profile
     nutrition = st.container(border=True)
     nutrition.header("Macros")
     if nutrition.button("Generate with AI"):
-        result = get_macros(profile.get("general"), profile.get("goals"))
+        result = get_macro(profile.get("general"), profile.get("goals"))
         profile["nutrition"] = result
         nutrition.success("AI has generated the result.")
 
-    with nutrition.form("nutrition_form",border=False):
+    with nutrition.form("nutrition_form", border=False):
         col1, col2, col3, col4 = st.columns(4)
         with col1:
-            calories = st.number_input("calories", min_value=0, step=1, value=profile["nutrition"].get("calories",0))
-        with col1:
-            proteins = st.number_input("proteins", min_value=0, step=1, value=profile["nutrition"].get("proteins",0))
+            calories = st.number_input(
+                "Calories",
+                min_value=0,
+                step=1,
+                value=profile["nutrition"].get("calories", 0),
+            )
+        with col2:
+            protein = st.number_input(
+                "Protein",
+                min_value=0,
+                step=1,
+                value=profile["nutrition"].get("protein", 0),
+            )
         with col3:
-            fats = st.number_input("fats", min_value=0, step=1, value=profile["nutrition"].get("fats",0))
+            fat = st.number_input(
+                "Fat",
+                min_value=0,
+                step=1,
+                value=profile["nutrition"].get("fat", 0),
+            )
         with col4:
-            carbs = st.number_input("carbs", min_value=0, step=1, value=profile["nutrition"].get("carbs",0))
+            carbs = st.number_input(
+                "Carbs",
+                min_value=0,
+                step=1,
+                value=profile["nutrition"].get("carbs", 0),
+            )
+
+        if st.form_submit_button("Save"):
+            with st.spinner():
+                st.session_state.profile = update_personal_info(
+                    profile,
+                    "nutrition",
+                    protein=protein,
+                    calories=calories,
+                    fat=fat,
+                    carbs=carbs,
+                )
+                st.success("Information saved")
+
+
+@st.fragment()
+def notes():
+    st.subheader("Notes: ")
+    for i , note in enumerate(st.session_state.notes):
+        cols = st.columns([5, 1])
+        with cols[0]:
+            st.text(note.get("text"))
+        with cols[1]:
+            if st.button("Delete", key=i):
+                delete_note(note.get("_id"))
+                st.session_state.notes.pop(i)
+                st.rerun()
+
+
+    new_note = st.text_input("Add a New Note: ")
+    if st.button("Add Note"):
+        if new_note:
+            note = add_note(new_note, st.session_state.profile_id)
+            st.session_state.notes.append(note)
+            st.rerun()
+
+@st.fragment()
+def ask_ai_func():
+    st.subheader('Ask AI')
+    user_question = st.text_input("Ask AI a Question: ")
+    if st.button("Ask AI"):
+        with st.spinner():
+            result = ask_ai(st.session_state.profile, user_question)
+            st.write(result)
+
+
 def forms():
     if "profile" not in st.session_state:
         profile_id = 1
@@ -94,6 +160,9 @@ def forms():
 
     personal_data_form()
     goals_form()
+    macro()
+    notes()
+    ask_ai_func()
 
 if __name__ == "__main__":
     forms()
