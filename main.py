@@ -58,9 +58,26 @@ def goals_form():
                     st.success("Goals Updated")
             else:
                 st.warning("Please Select At least One Goal.")
+@st.fragment
+def macros():
+    profile = st.session_state.profile
+    nutrition = st.container(border=True)
+    nutrition.header("Macros")
+    if nutrition.button("Generate with AI"):
+        result = get_macros(profile.get("general"), profile.get("goals"))
+        profile["nutrition"] = result
+        nutrition.success("AI has generated the result.")
 
-
-
+    with nutrition.form("nutrition_form",border=False):
+        col1, col2, col3, col4 = st.columns(4)
+        with col1:
+            calories = st.number_input("calories", min_value=0, step=1, value=profile["nutrition"].get("calories",0))
+        with col1:
+            proteins = st.number_input("proteins", min_value=0, step=1, value=profile["nutrition"].get("proteins",0))
+        with col3:
+            fats = st.number_input("fats", min_value=0, step=1, value=profile["nutrition"].get("fats",0))
+        with col4:
+            carbs = st.number_input("carbs", min_value=0, step=1, value=profile["nutrition"].get("carbs",0))
 def forms():
     if "profile" not in st.session_state:
         profile_id = 1
