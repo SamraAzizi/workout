@@ -76,3 +76,18 @@ Manages profile-related data retrieval and creation.
 - Streamlit
 - Required Python libraries: `requests`, `dotenv`, `pymongo`
 
+## Usage
+
+1. **Personal Data**: Enter and save your personal details such as name, age, weight, height, activity level, and gender to create a fitness profile.
+2. **Set Goals**: Choose your fitness goals, like "Muscle Gain" or "Fat Loss," which will help personalize your recommendations.
+3. **Track Nutrition**: Use the AI assistant to get recommended daily macronutrient targets (calories, protein, fat, and carbs) based on your profile and goals.
+4. **Add Notes**: Write and save personal notes to track your fitness progress or any other important details.
+5. **Ask AI**: Interact with the AI by asking questions about fitness, nutrition, or exercise. The AI uses your profile data to generate personalized responses.
+
+## Notes
+
+- Ensure that the Astra Datastax and LangFlow API tokens are valid and correctly set in the `.env` file for a smooth experience.
+- The app caches the database connection to reduce connection latency and improve performance.
+- For the AI recommendations to be accurate, update your profile and goals regularly to reflect any changes in your fitness journey.
+
+
