@@ -1,4 +1,8 @@
+# Personal Fitness Tool
 
+The **Personal Fitness Tool** is a web application designed to help users track and manage their fitness data, set personal goals, monitor nutrition, take notes, and interact with an AI assistant for personalized recommendations. Built using Streamlit, the app connects to a database hosted on Astra Datastax, leveraging LangFlow’s API to process user input and return insights based on fitness goals and activity levels.
+
+## Features
 
 1. **Personal Data Management**:
    - Allows users to input personal data, including name, age, weight, height, gender, and activity level.
