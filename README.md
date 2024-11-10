@@ -51,4 +51,28 @@ Manages the connection to the Astra Datastax database, including the initializat
   - `get_db()`: Establishes the database connection.
   - Creates `personal_data` and `notes` collections if they don’t exist.
 
+### `ai.py`
+Handles AI interactions using LangFlow's API.
+
+- **Functions**:
+  - `ask_ai()`: Sends a question to the AI along with the user’s profile data to receive a personalized response.
+  - `get_macro()`: Generates macronutrient recommendations based on user goals and profile.
+  - `run_flow()`: Helper function to send requests to the LangFlow API.
+
+### `profile.py`
+Manages profile-related data retrieval and creation.
+
+- **Functions**:
+  - `get_values()`: Provides a template for a new user profile.
+  - `create_profile()`: Inserts a new profile into the database.
+  - `get_profile()`: Retrieves a user profile by ID.
+  - `get_notes()`: Retrieves notes associated with a specific user.
+
+## Setup and Installation
+
+### Prerequisites
+- Python 3.8+
+- Astra Datastax account and database
+- Streamlit
+- Required Python libraries: `requests`, `dotenv`, `pymongo`
 
